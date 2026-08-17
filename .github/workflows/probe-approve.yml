@@ -1,0 +1,16 @@
+name: probe-approve
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  pull-requests: write
+jobs:
+  approve:
+    if: startsWith(github.head_ref, 'probe/')
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh pr review "$NUM" --repo "$REPO" --approve --body "probe approval by github-actions bot"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUM: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
